@@ -19,13 +19,15 @@
 # ## Observando os Dados
 # Execute a célula de código abaixo para carregar as bibliotecas de Python necessárias e os dados sobre os estudantes. Note que a última coluna desse conjunto de dados, `'passed'`, será nosso rótulo alvo (se o aluno foi ou não aprovado). As outras colunas são atributos sobre cada aluno.
 
-# In[130]:
+# In[18]:
 
 # Importar bibliotecas
 import numpy as np
 import pandas as pd
 from time import time
 from sklearn.metrics import f1_score
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 # Ler os dados dos estudantes
 student_data = pd.read_csv("student-data.csv")
@@ -33,13 +35,19 @@ print "Os dados dos estudantes foram lidos com êxito!"
 student_data.head(10)
 
 
-# In[131]:
+# In[19]:
 
-# Gráfico para entender o tempo de estudo de cada aluno
 get_ipython().magic(u'matplotlib inline')
 
-student_data[student_data['passed'] == 'yes']['studytime'].plot()
-student_data[student_data['passed'] == 'no']['studytime'].plot()
+import seaborn as sns
+sns.kdeplot(student_data.loc[student_data['passed']=='no', 'studytime'])
+sns.kdeplot(student_data.loc[student_data['passed']=='yes', 'studytime'])
+plt.legend(('passed', 'did not pass'))
+
+
+# In[20]:
+
+sns.countplot(data=student_data, hue='passed', x='studytime')
 
 
 # ### Implementação: Observando os Dados
@@ -51,7 +59,7 @@ student_data[student_data['passed'] == 'no']['studytime'].plot()
 # - A taxa de graduação da classe, `grad_rate`, em porcentagem (%).
 # 
 
-# In[132]:
+# In[21]:
 
 # TODO: Calcule o número de estudante
 n_students = student_data.shape[0]
@@ -84,7 +92,7 @@ print "Taxa de graduação: {:.2f}%".format(grad_rate)
 # 
 # Execute a célula de código abaixo para separar os dados dos estudantes em atributos e variáveis-alvo e verificar se algum desses atributos é não numérico.
 
-# In[133]:
+# In[22]:
 
 # Extraia as colunas dos atributo
 feature_cols = list(student_data.columns[:-1])
@@ -113,7 +121,7 @@ print X_all.head()
 # 
 # Essas colunas geradas são por vezes chamadas de _variáveis postiças_ (em inglês: _dummy variables_), e nós iremos utilizar a função [`pandas.get_dummies()`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.get_dummies.html?highlight=get_dummies#pandas.get_dummies) para fazer essa conversão. Execute a célula de código abaixo para executar a rotina de pré-processamento discutida nesta seção.
 
-# In[134]:
+# In[23]:
 
 def preprocess_features(X):
     ''' Pré-processa os dados dos estudantes e converte as variáveis binárias não numéricas em
@@ -150,7 +158,7 @@ print "Processed feature columns ({} total features):\n{}".format(len(X_all.colu
 #   - Estabelecer um `random_state` para as funções que você utiliza, se a opção existir.
 #   - Armazene os resultados em `X_train`, `X_test`, `y_train` e `y_test`.
 
-# In[135]:
+# In[24]:
 
 # TODO: Importe qualquer funcionalidade adicional de que você possa precisar aqui
 from sklearn.cross_validation import train_test_split
@@ -218,7 +226,7 @@ print "Taxa de graduação do conjunto de treinamento: {:.2f}%".format(100 * (y_
 # - `train_predict` - recebe como entrada um classificador, e dados de treinamento e teste, e executa `train_clasifier` e `predict_labels`.
 #  - Essa função vai dar a pontuação F<sub>1</sub> tanto para os dados de treinamento como para os de teste, separadamente.
 
-# In[136]:
+# In[25]:
 
 def train_classifier(clf, X_train, y_train):
     ''' Ajusta um classificador para os dados de treinamento. '''
@@ -269,7 +277,7 @@ def train_predict(clf, X_train, y_train, X_test, y_test):
 # - Treine cada modelo com cada tamanho de conjunto de treinamento e faça estimativas com o conjunto de teste (9 vezes no total).  
 # **Nota:** Três tabelas são fornecidas depois da célula de código a seguir, nas quais você deve anotar seus resultados.
 
-# In[137]:
+# In[26]:
 
 # TODO: Importe os três modelos de aprendizagem supervisionada do sklearn
 from sklearn import tree
@@ -281,24 +289,11 @@ clf_A = tree.DecisionTreeClassifier(random_state=42)
 clf_B = GaussianNB()
 clf_C = svm.SVC(random_state=42)
 
-# TODO: Configure os tamanho dos conjuntos de treinamento
-X_train_100 = X_train[0:100]
-y_train_100 = y_train[0:100]
-X_train_200 = X_train[0:200]
-y_train_200 = y_train[0:200]
-X_train_300 = X_train[0:300]
-y_train_300 = y_train[0:300]
-
-# TODO: Executar a função 'train_predict' para cada classificador e cada tamanho de conjunto de treinamento
-train_predict(clf_A, X_train_100, y_train_100, X_test, y_test)
-train_predict(clf_A, X_train_200, y_train_200, X_test, y_test)
-train_predict(clf_A, X_train_300, y_train_300, X_test, y_test)
-train_predict(clf_B, X_train_100, y_train_100, X_test, y_test)
-train_predict(clf_B, X_train_200, y_train_200, X_test, y_test)
-train_predict(clf_B, X_train_300, y_train_300, X_test, y_test)
-train_predict(clf_C, X_train_100, y_train_100, X_test, y_test)
-train_predict(clf_C, X_train_200, y_train_200, X_test, y_test)
-train_predict(clf_C, X_train_300, y_train_300, X_test, y_test)
+for clf in [clf_A, clf_B, clf_C]:
+    for n_train in [100, 200, 300]:
+        train_predict(clf, 
+                      X_train[:n_train], y_train[:n_train], 
+                      X_test, y_test)
 
 
 # ### Resultados Tabulados
@@ -343,6 +338,9 @@ train_predict(clf_C, X_train_300, y_train_300, X_test, y_test)
 # *Em um ou dois parágrafos, explique para o conselho de supervisores, utilizando termos leigos, como o modelo final escolhido deve trabalhar. Tenha certeza que você esteja descrevendo as melhores qualidades do modelo, por exemplo, como o modelo é treinado e como ele faz uma estimativa. Evite jargões técnicos ou matemáticos, como descrever equações ou discutir a implementação do algoritmo.*
 
 # **Resposta: ** O modelo que eu escolhi como melhor para classificar os alunos suceptíveis de sofrer intervenções ou não é o das Máquinas de Vetores de Suporte (SVM). Esse modelo utiliza os dados de alunos anteriores para fazer previsões sobre dados dos novos alunos. O modelo basicamente ira ser ensinado atravez dos dados obtidos com os alunos anteriores, criando uma margem entre os alunos que passaram de ano e aqueles que não passaram. Após haver uma margem estabelecida, são inseridos os modelos para os novos dados obtidos com os novos alunos. Dessa forma esse modelo será capaz de prever atravez dos dados obtidos se um estudante vai passar de ano ou não. Um exemplo pratico está nesse modelo que estou usando para minha startup NeuroAppp, aonde fazemos um radar de dificuldades de aprendizagem, e preciso de um modelo, comparando alunos anteriores com as dificuldades e aplicando os modelos para os novos alunos. Percebi que o metodo das Máquinas de Vetores de Suporte será essencial para a construção do nosso radar de dificuldades de aprendizagem enquanto trabalhando com uma menor quantidade de dados, quando o volume de dados aumentar será necessario escolher um modelo melhor.
+# 
+# Como um SVM sempre tenta maximizar a robustes dos resultados, a ideia e descobrir uma margem que possibilite maximizar tais resultados e que não possibilite erros de classificação. Para o caso de não ser encontrada uma margem de separação, o melhor a ser feito é criar uma fronteira de decisão e marcar os pontos afetados do outro lado da fronteira, ou seja, você consegue separar os dados da forma mais assertiva que for possível, os dados que não conseguirem ser separados são marcados e atribuidos ao grupo em que pertencem. O SVM localiza as fronteiras de decisão, afim de maximizar o espaço livre entre os dois conjuntos de dados, e permite exceções individuais os vetores de suporte. De forma basica esses vetores de suporte permitem ao SVM sempre tentar maximizar os seus modelos, a partir do momento que permitem exceções quando os dados são separados. Esses vetores consistem em um quantia pequena de subconjunto de dados de treinamento que são extraidos pelo algoritimo de aprendizagem. As maquinas de vetores de suporte funcionam de forma excelente em domínios complicados em que existe uma clara margem de separação, porêm não funcionam muito bem em conjunto de dados muito grandes, e tambem com quantidades grandes de ruidos aonde o Naive Bayes seria o mais indicado. Outra forma de conseguir superar o problema de uma separação contendo erros de classificação seria aumentando os valores de parâmetros como o C e o Gamma, dessa forma o modelo pode ter menor taxa de erros porêm com risco do aumento do overfitting.
+# 
 
 # ### Implementação: Calibrando o Modelo
 # Calibre o modelo escolhido. Utilize busca em matriz (`GridSearchCV`) com, pelo menos, um parâmetro importante calibrado com, pelo menos, 3 valores diferentes. Você vai precisar utilizar todo o conjunto de treinamento para isso. Na célula de código abaixo, você deve implementar o seguinte:
@@ -355,7 +353,7 @@ train_predict(clf_C, X_train_300, y_train_300, X_test, y_test)
 # - Execute uma busca em matriz no classificador `clf` utilizando o `f1_scorer` como método de pontuação e armazene-o em `grid_obj`.
 # - Treine o objeto de busca em matriz com os dados de treinamento (`X_train`, `y_train`) e armazene-o em `grid_obj`.
 
-# In[ ]:
+# In[28]:
 
 # TODO: Importe 'GridSearchCV' e 'make_scorer'
 from sklearn import svm, grid_search, datasets
@@ -400,6 +398,19 @@ print "O modelo calibrado tem F1 de {:.4f} no conjunto de teste.".format(predict
 
 # > **Nota**: Uma vez que você completou todas as implementações de código e respondeu todas as questões acima com êxito, você pode finalizar seu trabalho exportando o iPython Nothebook como um document HTML. Você pode fazer isso utilizando o menu acima e navegando para  
 # **File -> Download as -> HTML (.html)**. Inclua a documentação final junto com o notebook para o envio do seu projeto.
+
+# ## Referencias:
+# 
+# #### http://www-users.cs.umn.edu/~andre/arquivos/pdfs/svm.pdf 
+# #### http://conteudo.icmc.usp.br/CMS/Arquivos/arquivos_enviados/BIBLIOTECA_113_RT_192.pdf 
+# #### https://www.mql5.com/pt/articles/584
+# #### http://www.ic.unicamp.br/~afalcao/mo445/aula18.pdf
+# #### http://www.cprm.gov.br/publique/media/Tese_Danilo_Maretto.pdf
+
+# In[ ]:
+
+
+
 
 # In[ ]:
 
