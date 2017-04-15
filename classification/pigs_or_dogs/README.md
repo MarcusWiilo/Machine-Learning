@@ -18,8 +18,22 @@ In this project we teach the algorithm how to identify if a mysterious element i
 
 ### Code
 
-Code is provided in the file `classification.py.
+Code is provided in the file `classification.py`.
 
 In a terminal or command window, navigate to the top-level project directory `pigs_or_dogs/` (that contains this README) and run one of the following commands:
 
 ```python classification.py```
+
+## V2 Implementation
+
+### Instructions
+
+In this second version of the file I implemented a validation of the acuracy of the model in question.
+
+- It continues at 100%
+
+Model still very simple yet functional, you can better understand learning algorithms with this code.
+
+### Code
+
+Code is provided in the file `classification_v2_validation.py`.
