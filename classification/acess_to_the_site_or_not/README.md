@@ -27,3 +27,7 @@ In a terminal or command window, navigate to the top-level project directory `pi
 ### Data
 
 Data is provided in the file 'acess.csv'.
+
+### Need for improvement
+
+The model presented a 55.55% acuracy, as the data were created in a randomized way, it is necessary ways to improve this acuracy of the model.
