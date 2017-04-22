@@ -5,7 +5,7 @@ from collections import Counter
 df = pd.read_csv('search.csv')
 
 X_df = df[['home', 'search', 'logged']]
-Y_df = df['bought'] 
+Y_df = df['bought']
 
 Xdummies_df = pd.get_dummies(X_df)
 Ydummies_df = Y_df
@@ -23,8 +23,9 @@ print("Hit rate base: %f" % hit_rate_base)
 
 percent_of_training = 0.9
 
-size_of_training = percent_of_training * len(Y)
-size_of_test = len(Y) - size_of_training
+# TODO: Verify if  the ranges are ok with the int transformation
+size_of_training = int(percent_of_training * len(Y))
+size_of_test = int(len(Y) - size_of_training)
 
 train_data = X[:size_of_training]
 train_marcations = Y[:size_of_training]
