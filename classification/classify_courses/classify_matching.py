@@ -13,6 +13,14 @@ Ydummies_df = Y_df
 X = Xdummies_df.values
 Y = Ydummies_df.values
 
+# The effectiveness of the algorithm that kicks everything 0 or 1
+
+hits_of_one = sum(Y)
+hits_of_zero = len(Y) - hits_of_one
+hit_rate_base = 100.0 * max(hits_of_one, hits_of_zero) / len(Y)
+
+print("Hit rate base: %f" % hit_rate_base)
+
 percent_of_training = 0.9
 
 size_of_training = percent_of_training * len(Y)
@@ -35,5 +43,5 @@ total_of_hits = len(hits)
 total_of_elements = len(test_data)
 hit_rate = 100.0 * total_of_hits / total_of_elements
 
-print(hit_rate)
+print("Hit rate base: %f" % hit_rate)
 print(total_of_elements)
