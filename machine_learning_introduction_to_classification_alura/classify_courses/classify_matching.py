@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.naive_bayes import MultinomialNB
 from collections import Counter
 
+
 df = pd.read_csv('search.csv')
 
 X_df = df[['home', 'search', 'logged']]
