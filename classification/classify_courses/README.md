@@ -15,7 +15,7 @@ This is a simple example of classification explained in an Alura video in the Ma
 
 This is a project to identify whether a person will buy on your site or not.
 
-The algorithm is working well, while the hit_rate_base result is 50%, the hit_rate result is 65%, showing that this model works better than the traditional form.
+The algorithm is working well, while the hit_rate_base result is 53%, the hit_rate result is 65%, showing that this model works better than the traditional form.
 
 ### Code
 

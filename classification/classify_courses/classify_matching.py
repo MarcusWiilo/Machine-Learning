@@ -13,15 +13,10 @@ Ydummies_df = Y_df
 X = Xdummies_df.values
 Y = Ydummies_df.values
 
-# The effectiveness of the algorithm that kicks everything 0 or 1
-
-hit_base = max(Counter(Y).itervalues())
-hit_rate_base = 100.0 * hit_base / len(Y)
-print("Hit rate base: %f" % hit_rate_base)
-
 percent_of_training = 0.9
 
 # TODO: Verify if  the ranges are ok with the int transformation
+
 size_of_training = int(percent_of_training * len(Y))
 size_of_test = int(len(Y) - size_of_training)
 
@@ -41,5 +36,12 @@ total_of_hits = sum(hits)
 total_of_elements = len(test_data)
 hit_rate = 100.0 * total_of_hits / total_of_elements
 
-print("Hit rate base: %f" % hit_rate)
+print("Hit rate of algorithm: %f" % hit_rate)
 print(total_of_elements)
+
+# the effectivenes of the algorithm that kicks all in one values
+
+hit_base = max(Counter(test_marcations).itervalues())
+hit_rate_base = 100.0 * hit_base / len(test_marcations)
+print("Hit rate base: %f" % hit_rate_base)
+
