@@ -20,18 +20,24 @@ Ydummies_df = Y_df
 X = Xdummies_df.values
 Y = Ydummies_df.values
 
-percent_of_training = 0.9
+percent_of_training = 0.8
+percent_of_test = 0.1
 
 # TODO: Verify if  the ranges are ok with the int transformation
 
 size_of_training = int(percent_of_training * len(Y))
-size_of_test = int(len(Y) - size_of_training)
+size_of_test = int(percent_of_test * len(Y))
+size_of_validation = len(Y) - size_of_training - size_of_test
 
-train_data = X[:size_of_training]
-train_marcations = Y[:size_of_training]
+train_data = X[0:size_of_training]
+train_marcations = Y[0:size_of_training]
 
-test_data = X[-size_of_test:]
-test_marcations = Y[-size_of_test:]
+end_of_test = size_of_training + size_of_test
+test_data = X[size_of_training:end_of_test]
+test_marcations = Y[size_of_training:end_of_test]
+
+validation_of_data = X[end_of_test:]
+validation_of_marcation = Y[end_of_test:]
 
 def fit_and_predict(nome, model, train_data, train_marcations, test_data, test_marcations):
 
