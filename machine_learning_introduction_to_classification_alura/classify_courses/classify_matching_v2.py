@@ -60,12 +60,13 @@ result_multinomial = fit_and_predict("MultinomialNB", model_multinomial, train_d
 model_adaboost = AdaBoostClassifier()
 result_adaboost = fit_and_predict("AdaBoostClassifier", model_adaboost, train_data, train_marcations, test_data, test_marcations)
 
-if result_multinomial > result_adaboost:
-	winner = result_multinomial
-else:
-	winner = result_adaboost
+winner = result_multinomial if result_multinomial > result_adaboost else result_adaboost
 
-results = winner.predict(validation_of_data)
+print winner
+
+results = model_multinomial.predict(validation_of_data)
+results = model_adaboost.predict(validation_of_data)
+
 hits = (results == validation_of_marcation)
 
 total_of_hits = sum(hits)
