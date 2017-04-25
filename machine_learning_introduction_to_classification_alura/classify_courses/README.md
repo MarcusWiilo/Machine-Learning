@@ -17,6 +17,7 @@ This is a project to identify whether a person will buy on your site or not.
 
 The algorithm is working well, while the hit_rate_base result is 53%, the hit_rate result is 65%, showing that this model works better than the traditional form.
 
+
 ### Code
 
 Code is provided in the file `classify_matching.py`.
@@ -31,5 +32,14 @@ Data is provided in the file 'search.csv'.
 
 ### Need improvement
 
-Solved
+The algorithm displays the following error message:
+
+Hit rate of MultinomialNB: 71.4285714286
+Hit rate of AdaBoostClassifier: 100.0
+Traceback (most recent call last):
+  File "classify_matching_v2.py", line 68, in <module>
+    results = complex(winner.predict(validation_of_data))
+AttributeError: 'float' object has no attribute 'predict'
+
+
 

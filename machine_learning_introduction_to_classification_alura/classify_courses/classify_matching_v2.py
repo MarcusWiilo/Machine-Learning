@@ -52,18 +52,34 @@ def fit_and_predict(nome, model, train_data, train_marcations, test_data, test_m
 
 	msg = "Hit rate of {0}: {1}".format(nome, hit_rate)
 	print(msg)
+	return hit_rate
 
-model = MultinomialNB()
-fit_and_predict("MultinomialNB", model, train_data, train_marcations, test_data, test_marcations)
+model_multinomial = MultinomialNB()
+result_multinomial = fit_and_predict("MultinomialNB", model_multinomial, train_data, train_marcations, test_data, test_marcations)
 
-model = AdaBoostClassifier()
-fit_and_predict("AdaBoostClassifier", model, train_data, train_marcations, test_data, test_marcations)
+model_adaboost = AdaBoostClassifier()
+result_adaboost = fit_and_predict("AdaBoostClassifier", model_adaboost, train_data, train_marcations, test_data, test_marcations)
+
+if result_multinomial > result_adaboost:
+	winner = result_multinomial
+else:
+	winner = result_adaboost
+
+results = winner.predict(validation_of_data)
+hits = (results == validation_of_marcation)
+
+total_of_hits = sum(hits)
+total_of_elements = len(validation_of_marcation)
+hit_rate = 100.0 * total_of_hits / total_of_elements
+
+msg = "Hit rate of the winner of two algorithims in the real world: {0}".format(hit_rate)
+print(msg)
 
 # the effectivenes of the algorithm that kicks all in one values
 
-hit_base = max(Counter(test_marcations).itervalues())
-hit_rate_base = 100.0 * hit_base / len(test_marcations)
+hit_base = max(Counter(validation_of_marcation).itervalues())
+hit_rate_base = 100.0 * hit_base / len(validation_of_marcation)
 
 print("Hit rate base: %f" % hit_rate_base)
-print("Total of tests: %d " % len(test_data))
+print("Total of tests: %d " % len(validation_of_data))
 
