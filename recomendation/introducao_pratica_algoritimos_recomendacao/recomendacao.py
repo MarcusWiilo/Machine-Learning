@@ -1,0 +1,1 @@
+from algoritimo import avaliacoes
